@@ -10,8 +10,6 @@ int main(int argc, char ** argv)
 	int x,y, xd, yd;
 	int R,G,B;
 
-	// test test test
-
 	// Plot base floor width
 	for (int i = 1; i <= 1024; i++)
 	{
