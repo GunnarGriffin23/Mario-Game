@@ -2,6 +2,18 @@
 #include "SDL_Plotter.h"
 using namespace std;
 
+void plotImage(SDL_Plotter &game, int i, int j, int r, int g, int b)
+{
+	for (int x = i; x <= 1024; x++)
+	{
+	// Plot background width
+		for (int y = j; y < 768; y++)
+		{
+			game.plotPixel(x, y, r, g, b);
+		}
+	}
+}
+
 int main(int argc, char ** argv)
 {
 	SDL_Plotter g(768,1024);
@@ -10,27 +22,8 @@ int main(int argc, char ** argv)
 	int x,y, xd, yd;
 	int R,G,B;
 
-	// test
-
-	// Plot base floor width
-	for (int i = 1; i <= 1024; i++)
-	{
-		// Plot base floor height
-		for (int j = 1; j < 768; j++)
-		{
-			g.plotPixel(i, j, 0,0,0);
-		}
-	}
-
-	// Color background black
-	for (int i = 1; i <= 1024; i++)
-	{
-		// Plot background width
-		for (int j = 710; j < 768; j++)
-		{
-			g.plotPixel(i, j, 135,45,45);
-		}
-	}
+	plotImage(g,1,1,0,0,0);
+	plotImage(g,1,710,135,45,45);
 
 	while (!g.getQuit())
 	{
