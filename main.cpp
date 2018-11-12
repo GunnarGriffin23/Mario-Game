@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "SDL_Plotter.h"
 using namespace std;
 
@@ -16,6 +17,8 @@ void plotImage(SDL_Plotter &game, int i, int j, int r, int g, int b)
 
 int main(int argc, char ** argv)
 {
+    int x1,y1,r1,g1,b1,a1;
+    char buffer[2048];
 	SDL_Plotter g(768,1024);
 	bool stopped = false;
 	bool colored = false;
@@ -24,7 +27,23 @@ int main(int argc, char ** argv)
 
 	plotImage(g,1,1,0,0,0);
 	plotImage(g,1,710,135,45,45);
+	//begining of image read
+    ifstream infile("Mario_space_delimited.txt");
+    if (!infile)
+    {
+        cout <<"inputfile.txt no worky" << endl;
+        exit(1);
+    }
 
+    infile.getline(buffer,2045);
+    while(infile>>x1>>y1>>r1>>g1>>b1>>a1)
+    {
+        if (a1==1) {
+            printImage(g, x1, y1, r1, g1, b1);
+        }
+        infile.getline(buffer, 2045);
+    }
+//end of image read
 	while (!g.getQuit())
 	{
 		if (!stopped)
@@ -54,4 +73,5 @@ int main(int argc, char ** argv)
 
 		g.update();
 	}
+	infile.close();
 }
