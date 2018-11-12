@@ -2,12 +2,12 @@
 #include "SDL_Plotter.h"
 using namespace std;
 
-void plotImage(SDL_Plotter &game, int i, int j, int r, int g, int b)
+void plotImage(SDL_Plotter &game, int i, int j, int id, int jd, int r, int g, int b)
 {
-	for (int x = i; x <= 1024; x++)
+	for (int x = i; x <= id; x++)
 	{
 	// Plot background width
-		for (int y = j; y < 768; y++)
+		for (int y = j; y < jd; y++)
 		{
 			game.plotPixel(x, y, r, g, b);
 		}
@@ -22,8 +22,10 @@ int main(int argc, char ** argv)
 	int x,y, xd, yd;
 	int R,G,B;
 
-	plotImage(g,1,1,0,0,0);
-	plotImage(g,1,710,135,45,45);
+
+	plotImage(g,0,0,1024,768,0,0,0);
+	plotImage(g,0,710,1024,768,135,45,45);
+	plotImage(g,300,300,320,320,255,155,55);
 
 	while (!g.getQuit())
 	{
