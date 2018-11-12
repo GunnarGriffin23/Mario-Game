@@ -2,7 +2,43 @@
 #include "SDL_Plotter.h"
 using namespace std;
 
-void plotImage(SDL_Plotter &game, int i, int j, int id, int jd, int r, int g, int b)
+
+struct Pixel
+{
+public:
+	int x, y, r, g, b;
+	Pixel();
+	Pixel(int X, int Y, int R, int G, int B);
+};
+Pixel::Pixel()
+{
+	x = 0;
+	y = 0;
+	r = 0;
+	g = 0;
+	b = 0;
+}
+//constructor to make a specific pixel with a X, Y value RGB colors and transparency(alpha)
+Pixel::Pixel(int X, int Y, int R, int G, int B)
+{
+	x = X;
+	y = Y;
+	r = R;
+	g = G;
+	b = B;
+}
+
+void plotImage(SDL_Plotter &game, Pixel pixel[], int index)
+{
+	for(int i = 0; i < index; i++)
+	{
+		game.plotPixel(pixel[i].x, pixel[i].y, pixel[i].r, pixel[i].g, pixel[i].b);
+	}
+}
+
+//-----------------------------
+
+void plotBackground(SDL_Plotter &game, int i, int j, int id, int jd, int r, int g, int b)
 {
 	for (int x = i; x <= id; x++)
 	{
@@ -16,6 +52,7 @@ void plotImage(SDL_Plotter &game, int i, int j, int id, int jd, int r, int g, in
 
 int main(int argc, char ** argv)
 {
+	Pixel p1[1];
 	SDL_Plotter g(768,1024);
 	bool stopped = false;
 	bool colored = false;
@@ -23,9 +60,9 @@ int main(int argc, char ** argv)
 	int R,G,B;
 
 
-	plotImage(g,0,0,1024,768,0,0,0);
-	plotImage(g,0,710,1024,768,135,45,45);
-	plotImage(g,300,300,320,320,255,155,55);
+	plotBackground(g,0,0,1024,768,0,0,0);
+	plotBackground(g,0,710,1024,768,135,45,45);
+	plotBackground(g,300,300,320,320,255,155,55);
 
 	while (!g.getQuit())
 	{
