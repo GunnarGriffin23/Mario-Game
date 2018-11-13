@@ -1,68 +1,50 @@
 #include <iostream>
+#include <fstream>
 #include "SDL_Plotter.h"
+#include "Pixel.h"
 using namespace std;
 
 
-struct Pixel
-{
-public:
-	int x, y, r, g, b;
-	Pixel();
-	Pixel(int X, int Y, int R, int G, int B);
-};
-Pixel::Pixel()
-{
-	x = 0;
-	y = 0;
-	r = 0;
-	g = 0;
-	b = 0;
-}
-//constructor to make a specific pixel with a X, Y value RGB colors and transparency(alpha)
-Pixel::Pixel(int X, int Y, int R, int G, int B)
-{
-	x = X;
-	y = Y;
-	r = R;
-	g = G;
-	b = B;
-}
-
-void plotImage(SDL_Plotter &game, Pixel pixel[], int index)
-{
-	for(int i = 0; i < index; i++)
-	{
-		game.plotPixel(pixel[i].x, pixel[i].y, pixel[i].r, pixel[i].g, pixel[i].b);
-	}
-}
-
-//-----------------------------
-
-void plotBackground(SDL_Plotter &game, int i, int j, int id, int jd, int r, int g, int b)
-{
-	for (int x = i; x <= id; x++)
-	{
-	// Plot background width
-		for (int y = j; y < jd; y++)
-		{
-			game.plotPixel(x, y, r, g, b);
-		}
-	}
-}
-
 int main(int argc, char ** argv)
 {
-	Pixel p1[1];
+    int x1,y1,r1,g1,b1,a1, count = 0;
+    char buffer[2048];
+	Pixel p1[786432];
 	SDL_Plotter g(768,1024);
 	bool stopped = false;
 	bool colored = false;
 	int x,y, xd, yd;
 	int R,G,B;
 
+    ifstream infile("Mario.txt");
+    if (!infile)
+    {
+        cout <<"inputfile.txt no worky" << endl;
+        exit(1);
+    }
+
+    infile.getline(buffer,2045);
+    while(!infile.eof())
+    {
+        infile>>x1>>y1>>r1>>g1>>b1>>a1;
+        if (a1==1)
+        {
+//            p1[count].x = x1;
+//            p1[count].y = y1;
+//            p1[count].r = r1;
+//            p1[count].g = g1;
+//            p1[count].b = b1;
+            p1[count]=Pixel(x1, y1, r1, g1, b1);
+            count++;
+        }
+
+        infile.getline(buffer, 2045);
+    }
 
 	plotBackground(g,0,0,1024,768,0,0,0);
 	plotBackground(g,0,710,1024,768,135,45,45);
 	plotBackground(g,300,300,320,320,255,155,55);
+	plotImage(g, p1, count-1);
 
 	while (!g.getQuit())
 	{
