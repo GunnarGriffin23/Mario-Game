@@ -2,61 +2,83 @@
 #include "SDL_Plotter.h"
 using namespace std;
 
-int main(int argc, char ** argv)
+void plotImage(SDL_Plotter &game, int i, int j, int r, int g, int b)
 {
-	SDL_Plotter g(768,1024);
-	bool stopped = false;
-	bool colored = false;
-	int x,y, xd, yd;
-	int R,G,B;
+    for (int x = i; x <= 1024; x++)
+    {
+        // Plot background width
+        for (int y = j; y < 768; y++)
+        {
+            game.plotPixel(x, y, r, g, b);
+        }
+    }
+}
 
-	// Plot base floor width
-	for (int i = 1; i <= 1024; i++)
-	{
-		// Plot base floor height
-		for (int j = 1; j < 768; j++)
-		{
-			g.plotPixel(i, j, 0,0,0);
-		}
-	}
+int main(int argc, char ** argv) {
+    SDL_Plotter g(768, 1024);
+    bool stopped = false;
+//	bool colored = false;
+//	int x, y, xd, yd;
+    int playerx = 50, playery = 100, playerWidth = 10, playerHeight = 10, jumptime = 0;
+    int hsp, vsp;
+//	int R, G, B;
 
-	// Color background black
-	for (int i = 1; i <= 1024; i++)
-	{
-		// Plot background width
-		for (int j = 710; j < 768; j++)
-		{
-			g.plotPixel(i, j, 135,45,45);
-		}
-	}
+//	plotImage(g, 0, 0, 0, 0, 0);
+//	plotImage(g, 0, 710, 135, 45, 45);
 
-	while (!g.getQuit())
-	{
-		if (!stopped)
-		{
+    while (!g.getQuit())
+    {
+        //Player input
+        if (g.getKey() == 'P')
+        {
+            stopped = !stopped;
+        }
+        else if (g.getKey() == UP_ARROW)
+        {
+            if(jumptime == 0)
+                jumptime = 600;
+        }
+        else if (g.getKey() == RIGHT_ARROW)
+        {
+            hsp = min(hsp + 1, 1024 - playerWidth);
+        }
+        else if (g.getKey() == LEFT_ARROW)
+        {
+            hsp = max(hsp - 1, 0);
+        }
 
-		}
+        playerx = playerx + hsp;
 
-		if (g.kbhit())
-		{
-			if (g.getKey() == 'P')
-			{
-				stopped = !stopped;
-			}
-			else if (g.getKey() == RIGHT_ARROW)
-			{
-				// Move mario right
-			}
-			else if (g.getKey() == LEFT_ARROW)
-			{
-				// Move mario left
-			}
-			else if (g.getKey() == UP_ARROW)
-			{
-				// Mario jump
-			}
-		}
+        if((playery + playerHeight) != 768)
+        {
+            playery += 1;
+        }
 
-		g.update();
-	}
+        if(jumptime != 0)
+        {
+            jumptime--;
+
+            if(jumptime > 300)
+                playery -= 2;
+        }
+
+        //Draw loop
+
+        g.clear();
+
+        for (int col = playerx; col < playerWidth + playerx; col++)
+        {
+            for (int row = playery; row < playerHeight + playery; row++)
+            {
+                g.plotPixel(col, row, 255, 0, 0);
+            }
+        }
+
+        g.update();
+
+        if (g.kbhit())
+        {
+            g.getKey();
+        }
+    }
 }
