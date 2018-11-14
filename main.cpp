@@ -20,7 +20,7 @@ int main(int argc, char ** argv) {
 //	bool colored = false;
 //	int x, y, xd, yd;
     int playerx = 50, playery = 100, playerWidth = 10, playerHeight = 10, jumptime = 0;
-    int hsp, vsp;
+    int hsp = 0, vsp = 0;
 //	int R, G, B;
 
 //	plotImage(g, 0, 0, 0, 0, 0);
@@ -28,6 +28,7 @@ int main(int argc, char ** argv) {
 
     while (!g.getQuit())
     {
+        hsp = 0;
         //Player input
         if (g.getKey() == 'P')
         {
@@ -40,11 +41,11 @@ int main(int argc, char ** argv) {
         }
         else if (g.getKey() == RIGHT_ARROW)
         {
-            hsp = min(hsp + 1, 1024 - playerWidth);
+            hsp = 1;
         }
         else if (g.getKey() == LEFT_ARROW)
         {
-            hsp = max(hsp - 1, 0);
+            hsp = -1;
         }
 
         playerx = playerx + hsp;
