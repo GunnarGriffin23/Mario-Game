@@ -1,113 +1,45 @@
 #include <iostream>
 #include <fstream>
-#include <cstdlib>
-#include <vector>
 #include "SDL_Plotter.h"
 using namespace std;
 
-class Pixel
-{
-public:
-    int r, g, b;
-    void setRed(int R);
-    void setGreen(int G);
-    void setBlue(int B);
-};
-
-
-void Pixel::setRed(int R)
-{
-    r = R;
-}
-
-void Pixel::setGreen(int G)
-{
-    g = G;
-}
-
-void Pixel::setBlue(int B)
-{
-    b = B;
-}
-
-
-
-
-
 int main(int argc, char ** argv)
 {
-	SDL_Plotter g(600,700);
-	vector<Pixel> p1(150000);
+	SDL_Plotter g(768,1024);
 	bool stopped = false;
 	bool colored = false;
-	int x,y, xd, yd, skip, count = 0, xc = 0, yc = 0;
+	int x,y, xd, yd;
 	int R,G,B;
+	int lives = 5, score = 0, highScore = 0, level = 1;
+	ifstream highScoreInFile;
+	ofstream highScoreOutFile;
+	highScoreInFile.open("highscore.txt");
 
-	ifstream inFile;
-	inFile.open("test.txt");
-	if(!inFile)
-    {
-        cerr << "The texture file failed to load" << endl;
-        exit(1);
-    }
+	// reading in previous highscore if available
+	if (highScoreInFile)
+	{
+		highScoreInFile >> highScore;
+	}
 
-//    inFile >> skip;
-//    inFile >> skip;
-//    inFile >> skip;
+	// Plot base floor width
+	for (int i = 1; i <= 1024; i++)
+	{
+		// Plot base floor height
+		for (int j = 1; j < 768; j++)
+		{
+			g.plotPixel(i, j, 0,0,0);
+		}
+	}
 
-    while(inFile >> R >> G >> B)
-    {
-        p1[count].setRed(R);
-        p1[count].setGreen(G);
-        p1[count].setBlue(B);
-        xc++;
-        if(xc == 436)
-        {
-            yc++;
-            xc = 0;
-        }
-
-//        cout << xc << " " << yc << " " << p1[count].r << " " << p1[count].g << " " << p1[count].b << endl;
-        g.plotPixel(xc, yc, p1[count].r,p1[count].g,p1[count].b);
-        count++;
-    }
-
-
-
-
-//for(int i = 0; i < 698; i++)
-//{
-//    int count1 = 0;
-//    for(int j = 0; j < 436; j++)
-//    {
-//        g.plotPixel(j,i,p1[count1].r, p1[count1].g, p1[count1].b);
-//        count1++;
-//    }
-//}
-
-
-
-
-
-//	// Plot base floor width
-//	for (int i = 1; i <= 1024; i++)
-//	{
-//		// Plot base floor height
-//		for (int j = 1; j < 768; j++)
-//		{
-//			g.plotPixel(i, j, 0,0,0);
-//		}
-//	}
-
-//	// Color background black
-//	for (int i = 1; i <= 1024; i++)
-//	{
-//		// Plot background width
-//		for (int j = 710; j < 768; j++)
-//		{
-//			g.plotPixel(i, j, 135,45,45);
-//		}
-//	}
+	// Color background black
+	for (int i = 1; i <= 1024; i++)
+	{
+		// Plot background width
+		for (int j = 710; j < 768; j++)
+		{
+			g.plotPixel(i, j, 135,45,45);
+		}
+	}
 
 	while (!g.getQuit())
 	{
@@ -128,14 +60,24 @@ int main(int argc, char ** argv)
 			}
 			else if (g.getKey() == LEFT_ARROW)
 			{
-				// Move mario left
+				lives--;
 			}
 			else if (g.getKey() == UP_ARROW)
 			{
-				// Mario jump
+				score += 100000;
 			}
 		}
 
+		if (lives == 0)
+		{
+			stopped = !stopped;
+			if (score > highScore)
+			{
+				highScoreOutFile.open("highscoreout.txt");
+				highScoreOutFile << highScore;
+			}
+		}
 		g.update();
 	}
+	return 0;
 }
