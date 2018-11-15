@@ -37,14 +37,15 @@ void Pixel::setBlue(int B)
 int main(int argc, char ** argv)
 {
 	SDL_Plotter g(600,700);
-	vector<Pixel> p1(150000);
+	Pixel dummy[700][7000];
+//	vector<Pixel> p1(1);
 	bool stopped = false;
 	bool colored = false;
-	int x,y, xd, yd, skip, count = 0, xc = 0, yc = 0;
+	int x,y, xd, yd, skip, count = 0, rowCount = 0, colCount = 0;
 	int R,G,B;
 
 	ifstream inFile;
-	inFile.open("test.txt");
+	inFile.open("smol.txt");
 	if(!inFile)
     {
         cerr << "The texture file failed to load" << endl;
@@ -57,19 +58,27 @@ int main(int argc, char ** argv)
 
     while(inFile >> R >> G >> B)
     {
-        p1[count].setRed(R);
-        p1[count].setGreen(G);
-        p1[count].setBlue(B);
-        xc++;
-        if(xc == 436)
+        dummy[rowCount][colCount].setRed(R);
+        dummy[rowCount][colCount].setGreen(G);
+        dummy[rowCount][colCount].setBlue(B);
+        colCount++;
+        if(colCount == 436)
         {
-            yc++;
-            xc = 0;
+            rowCount++;
+            colCount = 0;
         }
 
 //        cout << xc << " " << yc << " " << p1[count].r << " " << p1[count].g << " " << p1[count].b << endl;
-        g.plotPixel(xc, yc, p1[count].r,p1[count].g,p1[count].b);
+//            g.plotPixel(xc, yc, p1[count].r, p1[count].g, p1[count].b);
         count++;
+    }
+
+    for(int j = 0; j < 24; j++)
+    {
+        for(int i = 192; i < 192 + 15; i++)
+        {
+            g.plotPixel(i,j, dummy[j][i].r, dummy[j][i].g, dummy[j][i].b);
+        }
     }
 
 
