@@ -7,4 +7,7 @@ Get the score working (enemy defeated, coins, level compete, level bonus)
 Life system (keep track of how many left, game over when count = 0)
 characters(get the sprite sheet working, hitboxes, animations, enemies)
 
+fix the sprite printer to print individual sprites from a strip
+
+
 If you think of anything else add it.
