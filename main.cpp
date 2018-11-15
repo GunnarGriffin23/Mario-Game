@@ -73,7 +73,7 @@ int main(int argc, char ** argv)
 			stopped = !stopped;
 			if (score > highScore)
 			{
-				highScoreOutFile.open("highscoreout.txt");
+				highScoreOutFile.open("highscore.txt");
 				highScoreOutFile << highScore;
 			}
 		}
